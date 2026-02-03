@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saved Biodata</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* SEARCH */
+.search-box {
+  margin-bottom: 15px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+}
+
+/* LIST */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.name {
+  font-weight: bold;
+}
+
+/* ACTION BUTTONS */
+.actions button {
+  margin-left: 8px;
+  padding: 6px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.view {
+  background: #1976d2;
+  color: white;
+}
+
+.delete {
+  background: #d32f2f;
+  color: white;
+}
+
+/* HOME BUTTON */
+.home-wrapper {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.home-btn {
+  padding: 10px 22px;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #2e7d32;
+  color: white;
+}
+
+.home-btn:hover {
+  background: #1b5e20;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Saved Biodata</h1>
+
+  <!-- SEARCH -->
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by name..." oninput="filterList()">
+  </div>
+
+  <!-- LIST -->
+  <ul id="list" class="list"></ul>
+
+  <!-- HOME BUTTON -->
+  <div class="home-wrapper">
+    <button class="home-btn" onclick="gohome()">Home</button>
+  </div>
+</div>
+
+<script>
+let allData = [];
+
+/* ===== OPEN DB ===== */
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open("BiodataDB", 1);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject();
+  });
+}
+
+/* ===== LOAD DATA ===== */
+async function loadData() {
+  const db = await openDB();
+  const tx = db.transaction("pdfs", "readonly");
+  const store = tx.objectStore("pdfs");
+  const req = store.getAll();
+
+  req.onsuccess = () => {
+    allData = req.result.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+    renderList(allData);
+  };
+}
+
+/* ===== RENDER LIST ===== */
+function renderList(data) {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  if (data.length === 0) {
+    list.innerHTML = "<li>No saved biodata found.</li>";
+    return;
+  }
+
+  data.forEach(item => {
+    const li = document.createElement("li");
+
+    li.innerHTML = `
+      <span class="name">${item.name}</span>
+      <span class="actions">
+        <button class="view" onclick="viewPDF(${item.id})">View</button>
+        <button class="delete" onclick="deletePDF(${item.id})">Delete</button>
+      </span>
+    `;
+
+    list.appendChild(li);
+  });
+}
+
+/* ===== SEARCH FILTER ===== */
+function filterList() {
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const filtered = allData.filter(item =>
+    item.name.toLowerCase().includes(q)
+  );
+  renderList(filtered);
+}
+
+/* ===== VIEW PDF ===== */
+async function viewPDF(id) {
+  const db = await openDB();
+  const tx = db.transaction("pdfs", "readonly");
+  const store = tx.objectStore("pdfs");
+  const req = store.get(id);
+
+  req.onsuccess = () => {
+    const url = URL.createObjectURL(req.result.blob);
+    window.open(url, "_blank");
+  };
+}
+
+/* ===== DELETE PDF ===== */
+async function deletePDF(id) {
+  if (!confirm("Delete this biodata?")) return;
+
+  const db = await openDB();
+  const tx = db.transaction("pdfs", "readwrite");
+  tx.objectStore("pdfs").delete(id);
+
+  tx.oncomplete = () => loadData();
+}
+
+/* HOME */
+function gohome() {
+  window.location.href = "home.html";
+}
+
+/* INIT */
+loadData();
+</script>
+
+</body>
+</html>

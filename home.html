@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Matrimony Biodata</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f4f6f8;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 15px 40px;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #1976d2;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions {
+  display: flex;
+  gap: 30px;
+}
+
+.action-btn {
+  width: 180px;
+  height: 60px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+}
+
+.add { background: #1976d2; }
+.search { background: #4caf50; }
+
+@media (max-width: 500px) {
+  .actions {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">MB</div>
+    <div><b>Matrimony Biodata</b></div>
+  </div>
+</header>
+
+<main>
+  <div class="actions">
+    <button class="action-btn add" onclick="location.href='preview.html'">Add</button>
+    <button class="action-btn search" onclick="location.href='search.html'">Search</button>
+  </div>
+</main>
+
+</body>
+</html>

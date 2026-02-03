@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Matrimony Biodata – Live</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Times New Roman", serif;
+  background: #eee;
+  padding: 20px;
+}
+
+/* ===== PDF PAGE ===== */
+.pdf-container {
+  width: 794px;
+  height: 1123px;
+  margin: auto;
+  background: #fff;
+  padding: 25px 30px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+
+/* ===== TOP IMAGE ===== */
+.top-banner-img {
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.top-banner-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== HEADER ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 26px;
+  text-transform: uppercase;
+}
+
+/* ===== PROFILE PHOTO ===== */
+.profile-box {
+  width: 140px;
+  height: 180px;
+  border: 2px solid #6bbf59;
+  overflow: hidden;
+}
+
+.profile-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  margin-top: 14px;
+  page-break-inside: avoid;
+}
+
+.section h3 {
+  background: #eee;
+  padding: 5px;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+/* ===== TABLE ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+td.label {
+  width: 40%;
+  font-weight: bold;
+}
+
+/* ===== INPUTS ===== */
+input, select {
+  width: 100%;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  background: transparent;
+}
+
+select { appearance: none; }
+
+/* ===== TWO COLUMN ===== */
+.flex {
+  display: flex;
+  gap: 20px;
+}
+.flex > div { width: 50%; }
+
+/* ===== HOROSCOPE ===== */
+.horoscope-box {
+  height: 180px;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.horoscope-box img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* ===== ACTIONS ===== */
+.actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* ===== HIDE UI IN PDF ===== */
+@media print {
+  .no-print, .actions {
+    display: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="biodata" class="pdf-container">
+
+  <!-- ✅ TOP BANNER IMAGE -->
+  <div class="top-banner-img">
+    <img id="bannerImg" alt="Top Banner">
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <h1><input id="name" class="text-only" placeholder="FULL NAME"></h1>
+    </div>
+
+    <div class="profile-box">
+      <img id="profilePhoto">
+    </div>
+  </div>
+
+  <!-- BASIC DETAILS -->
+  <div class="section">
+    <h3>Basic Details</h3>
+    <table>
+      <tr>
+        <td class="label">பதிவு எண் :</td>
+        <td><input type="number" id="serial" min="1"></td>
+      </tr>
+      <tr>
+        <td class="label">பால் </td>
+        <td>
+          <select id="gender">
+            <option></option>
+            <option>ஆண்</option>
+            <option>பெண்</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td class="label">பிறந்த தேதி :</td>
+        <td><input type="date" id="dob"></td>
+      </tr>
+      <tr>
+        <td class="label">வயது :</td>
+        <td><input id="age" readonly></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- RELIGIOUS + PROFESSIONAL -->
+  <div class="section flex">
+    <div>
+      <h3>Religious / Community Details</h3>
+      <table>
+        <tr><td class="label">மதம் :</td><td><input id="religion" class="text-only"></td></tr>
+        <tr><td class="label">Caste :</td><td><input id="caste" class="text-only"></td></tr>
+        <tr><td class="label">குலம் :</td><td><input id="subcaste" class="text-only"></td></tr>
+        <tr><td class="label">தாய் மொழி :</td><td><input id="tongue" class="text-only"></td></tr>
+      </table>
+    </div>
+
+    <div>
+      <h3>படிப்பு மற்றும் வேலை விவரம்</h3>
+      <table>
+        <tr><td class="label">படிப்பு :</td><td><input id="education"></td></tr>
+        <tr><td class="label">வேலை :</td><td><input id="occupation"></td></tr>
+        <tr><td class="label">வருமானம் :</td><td><input type="number" id="income" min="0"></td></tr>
+        <tr><td class="label">சொத்து :</td><td><input id="location"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAMILY -->
+  <div class="section">
+    <h3>குடும்ப விவரம்</h3>
+    <table>
+      <tr><td class="label">தந்தை பெயர் :</td><td><input id="father" class="text-only"></td></tr>
+      <tr><td class="label">தாயார் பெயர் :</td><td><input id="mother" class="text-only"></td></tr>
+      <tr><td class="label">உடன் பிறந்தவர் :</td><td><input id="siblings"></td></tr>
+    </table>
+  </div>
+
+  <!-- HOROSCOPE -->
+  <div class="section">
+    <h3>Horoscope</h3>
+    <div class="horoscope-box">
+      <img id="horoscopeImage">
+    </div>
+  </div>
+
+</div>
+
+<!-- UI CONTROLS -->
+<div class="actions no-print">
+  ✅ Banner Image:
+  <input type="file" accept="image/*" onchange="loadImage(event,'bannerImg')">
+  <br><br>
+  ✅ Profile Photo:
+  <input type="file" accept="image/*" onchange="loadImage(event,'profilePhoto')">
+  <br><br>
+  ✅ Horoscope:
+  <input type="file" accept="image/*" onchange="loadImage(event,'horoscopeImage')">
+  <br><br>
+  <button onclick="downloadAndStore()">Download PDF</button>
+</div>
+
+<script>
+function loadImage(e, id) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const r = new FileReader();
+  r.onload = () => document.getElementById(id).src = r.result;
+  r.readAsDataURL(file);
+}
+
+/* AUTO AGE */
+document.getElementById("dob").addEventListener("change", function () {
+  if (!this.value) return;
+  const dob = new Date(this.value);
+  const diff = Date.now() - dob.getTime();
+  document.getElementById("age").value = new Date(diff).getUTCFullYear() - 1970;
+});
+
+/* TEXT ONLY */
+document.querySelectorAll(".text-only").forEach(el => {
+  el.addEventListener("input", () => {
+    el.value = el.value.replace(/[0-9]/g, "");
+  });
+});
+
+/* ===== IndexedDB ===== */
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open("BiodataDB", 1);
+    req.onupgradeneeded = e => {
+      e.target.result.createObjectStore("pdfs", { keyPath: "id" });
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject();
+  });
+}
+
+async function savePDF(blob, filename) {
+  const db = await openDB();
+  const tx = db.transaction("pdfs", "readwrite");
+  tx.objectStore("pdfs").add({
+    id: Date.now(),
+    name: filename,
+    blob
+  });
+}
+
+/* DOWNLOAD + STORE + REDIRECT */
+function downloadAndStore() {
+  const name = document.getElementById("name").value.trim() || "Client";
+  const serial = document.getElementById("serial").value || "000";
+  const filename = `${serial}_${name}.pdf`;
+
+  // ✅ IMPORTANT: Wait 200ms for image render before PDF
+  setTimeout(() => {
+    html2pdf().set({
+      margin: 0,
+      html2canvas: { scale: 2, scrollY: 0, useCORS: true },
+      jsPDF: { format: "a4", orientation: "portrait" }
+    }).from(document.getElementById("biodata"))
+      .outputPdf("blob")
+      .then(async blob => {
+        await savePDF(blob, filename);
+
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+
+        window.location.href = "home.html";
+      });
+  }, 200);
+}
+</script>
+
+</body>
+</html>
